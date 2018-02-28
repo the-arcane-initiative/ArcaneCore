@@ -1,0 +1,17 @@
+# Windows
+.vs
+intermediate
+
+# Linux
+CMakeFiles
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+
+_build
+build
+
+docs/build/*
+
+logs/
+
