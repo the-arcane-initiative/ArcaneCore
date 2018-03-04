@@ -35,7 +35,6 @@
 #include <chrono>
 #include <ctime>
 
-#include "arcanecore/base/BaseAPI.h"
 #include "arcanecore/base/Exceptions.hpp"
 
 // allows us to use std::localtime, without warning it's unsafe.

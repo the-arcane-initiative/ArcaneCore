@@ -37,12 +37,21 @@
 #ifndef ARCANECORE_BASE_BASEAPI_HPP_
 #define ARCANECORE_BASE_BASEAPI_HPP_
 
+
 // TODO: DOC
 #define ARC_BASE_API_VERSION_MAJOR 0
 // TODO: DOC
 #define ARC_BASE_API_VERSION_MINOR 3
+
+
+#define ARC_BASE_BUILD_VER_NS2(major, minor) v##major##_##minor
+#define ARC_BASE_BUILD_VER_NS(major, minor) ARC_BASE_BUILD_VER_NS2(major, minor)
+
 // TODO: DOC
-#define ARC_BASE_VERSION_NS \
-    v##ARC_BASE_API_VERSION_MAJOR_##ARC_BASE_API_VERSION_MINOR
+#define ARC_BASE_VERSION_NS         \
+    ARC_BASE_BUILD_VER_NS(          \
+        ARC_BASE_API_VERSION_MAJOR, \
+        ARC_BASE_API_VERSION_MINOR  \
+    )
 
 #endif

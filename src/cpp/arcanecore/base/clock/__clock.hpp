@@ -37,7 +37,7 @@
 #ifndef ARCANECORE_BASE_CLOCK_HPP_
 #define ARCANECORE_BASE_CLOCK_HPP_
 
-#include "arcanecore/base/BaseAPI.h"
+#include "arcanecore/base/BaseAPI.hpp"
 
 
 namespace arc

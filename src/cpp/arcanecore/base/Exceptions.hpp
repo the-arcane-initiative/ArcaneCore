@@ -43,7 +43,8 @@
 #include <deus/UnicodeStorage.hpp>
 #include <deus/UnicodeView.hpp>
 
-#include "arcanecore/base/BaseAPI.h"
+#include "arcanecore/base/BaseAPI.hpp"
+
 
 namespace arc
 {
@@ -139,6 +140,25 @@ public:
 
     RuntimeError(const deus::UnicodeView& what)
         : ArcError(what, "RuntimeError")
+    {
+    }
+};
+
+//------------------------------------------------------------------------------
+//                                  STATE ERROR
+//------------------------------------------------------------------------------
+
+/*!
+ * \brief Warns that an action has been requested that is not valid for the
+ *        current state.
+ */
+class StateError
+    : public ArcError
+{
+public:
+
+    StateError(const deus::UnicodeView& what)
+        : ArcError(what, "StateError")
     {
     }
 };

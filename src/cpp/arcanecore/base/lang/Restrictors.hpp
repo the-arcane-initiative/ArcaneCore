@@ -1,7 +1,8 @@
 /*!
  * \file
  * \author David Saxon
- * \brief Operations for measuring time.
+ * \brief Bases classes that can be inherited from to restrict an object's
+ *        functionality.
  *
  * \copyright Copyright (c) 2018, The Arcane Initiative
  *            All rights reserved.
@@ -34,49 +35,69 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef ARCANECORE_BASE_CLOCK_CLOCKOPERATIONS_HPP_
-#define ARCANECORE_BASE_CLOCK_CLOCKOPERATIONS_HPP_
-
-#include <deus/UnicodeStorage.hpp>
-#include <deus/UnicodeView.hpp>
+#ifndef ARCANECORE_BASE_LANG_RESTRICTORS_HPP_
+#define ARCANECORE_BASE_LANG_RESTRICTORS_HPP_
 
 #include "arcanecore/base/BaseAPI.hpp"
-#include "arcanecore/base/clock/ClockDefinitions.hpp"
 
 
 namespace arc
 {
 inline namespace ARC_BASE_VERSION_NS
 {
-namespace clock
+namespace lang
 {
 
-/*!
- * \brief Returns the time elapsed since Linux Epoch (1st January 1970).
- *
- * \param metric The time measurement metric the result will be returned in.
- */
-TimeInt get_current_time(TimeMetric metric = TimeMetric::kMilliseconds);
 
 /*!
- * \brief Returns the current the given time as a formated string.
- *
- * \param t The time value (since Linux Epoch) that should be formatted as a
- *          string.
- * \param format Specifies the layout of the formatted string. See strftime for
- *               syntax.
- * \param metric The time measurement metric which t is measured in.
+ * \brief Classes that privately inherit from this class will not be copyable.
  */
-// TODO: throws (can we use throw keyword)
-deus::UnicodeStorage get_timestamp(
-        TimeInt t,
-        const deus::UnicodeView& format =
-            deus::UnicodeView("%Y/%m/%d - %H:%M:%S", deus::Encoding::kASCII),
-        TimeMetric metric = TimeMetric::kMilliseconds);
+class Noncopyable
+{
+public:
 
-} // namespace clock
-} // namespace ARC_BASE_VERSION_NS
+    Noncopyable() {}
+
+private:
+
+    // deleted
+    Noncopyable(const Noncopyable&) = delete;
+    Noncopyable& operator=(const Noncopyable&) = delete;
+};
+
+/*!
+ * \brief Classes that privately inherit from this class will not be movable.
+ */
+class Nonmovable
+{
+public:
+
+    Nonmovable() {}
+
+private:
+
+    // deleted
+    Nonmovable(Nonmovable&&) = delete;
+    Nonmovable& operator=(Nonmovable&) = delete;
+};
+
+/*!
+ * \brief Classes that privately inherit from this class will not be comparable.
+ */
+class Noncomparable
+{
+public:
+
+    Noncomparable() {}
+
+private:
+
+    // deleted
+    bool operator==(const Noncomparable&) = delete;
+};
+
+} // namespace lang
+} // namesace ARC_BASE_VERSION_NS
 } // namespace arc
-
 
 #endif

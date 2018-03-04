@@ -37,7 +37,7 @@
 #ifndef ARCANECORE_BASE_HPP_
 #define ARCANECORE_BASE_HPP_
 
-#include "arcanecore/base/BaseAPI.h"
+#include "arcanecore/base/BaseAPI.hpp"
 
 
 /*!

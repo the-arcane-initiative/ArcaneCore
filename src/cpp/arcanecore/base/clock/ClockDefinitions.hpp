@@ -39,14 +39,13 @@
 
 #include <cstdint>
 
-#include "arcanecore/base/BaseAPI.h"
+#include "arcanecore/base/BaseAPI.hpp"
 
 
 namespace arc
 {
 inline namespace ARC_BASE_VERSION_NS
 {
-
 namespace clock
 {
 
