@@ -57,7 +57,9 @@ include_directories(
 )
 
 set(BASE_SRC
-    src/cpp/arcanecore/base/arg/Definition.cpp
+    src/cpp/arcanecore/base/arg/Action.cpp
+    src/cpp/arcanecore/base/arg/DefaultHelpFlag.cpp
+    src/cpp/arcanecore/base/arg/Flag.cpp
     src/cpp/arcanecore/base/arg/Parser.cpp
     src/cpp/arcanecore/base/clock/ClockOperations.cpp
 )

@@ -42,8 +42,7 @@
 
 namespace arc
 {
-inline namespace ARC_BASE_VERSION_NS
-{
+ARC_BASE_VERSION_NS_BEGIN
 
 /*!
  * \brief Module program input argument parsing.
@@ -54,7 +53,7 @@ namespace arg
 {
 } // namespace arg
 
-} // namesace ARC_BASE_VERSION_NS
+ARC_BASE_VERSION_NS_END
 } // namespace arc
 
 #endif

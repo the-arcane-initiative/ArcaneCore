@@ -46,8 +46,7 @@
 
 namespace arc
 {
-inline namespace ARC_BASE_VERSION_NS
-{
+ARC_BASE_VERSION_NS_BEGIN
 namespace clock
 {
 
@@ -75,7 +74,7 @@ deus::UnicodeStorage get_timestamp(
         TimeMetric metric = TimeMetric::kMilliseconds);
 
 } // namespace clock
-} // namespace ARC_BASE_VERSION_NS
+ARC_BASE_VERSION_NS_END
 } // namespace arc
 
 

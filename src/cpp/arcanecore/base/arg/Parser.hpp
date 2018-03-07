@@ -45,8 +45,7 @@
 
 namespace arc
 {
-inline namespace ARC_BASE_VERSION_NS
-{
+ARC_BASE_VERSION_NS_BEGIN
 namespace arg
 {
 
@@ -54,14 +53,12 @@ namespace arg
 //                              FORWARD DECLARATIONS
 //------------------------------------------------------------------------------
 
-class Definition;
+class Action;
+class Flag;
 
 /*!
  * \brief The arc::arg::Parser is used to parse command line arguments and
- *        execute actions based on them.
- *
- * Argument definitions are defined via arc::arg::Definiton objects which are
- * added to the Parser via arc::arg::Parser::add_definition().
+ *        execute functionality based on them.
  */
 class Parser
     : private arc::lang::Noncopyable
@@ -93,11 +90,12 @@ public:
     //                          PUBLIC MEMBER FUNCTIONS
     //--------------------------------------------------------------------------
 
+    // TODO: this should take argi (default to 1)
     /*!
      * \brief Runs the command line argument parser.
      *
-     * This function returns once all arguments have been parsed and all actions
-     * executed.
+     * This function returns once all arguments have been parsed and all
+     * functionality executed.
      *
      * \param argc The number of command line arguments in argv.
      * \param argv The command line arguments (the first argument should be the
@@ -108,14 +106,34 @@ public:
     int execute(int argc, char** argv);
 
     /*!
-     * \brief Adds an argument definition to the parser.
+     * \brief Returns the current list of Actions registered in this Parser.
+     */
+    const std::list<std::unique_ptr<arc::arg::Action>>& get_actions() const;
+
+    /*!
+     * \brief Adds an action definition to the parser.
      *
-     * \note The Parser will take ownership of the definition pointer.
+     * \note The Parser will take ownership of the Action pointer.
      *
      * \throws arc::ex::StateError If this function is called during
      *                             arc::arg::Parser::execute().
      */
-    void add_definition(arc::arg::Definition* def);
+    void add_action(arc::arg::Action* action);
+
+    /*!
+     * \brief Returns the current list of Flags registered in this Parser.
+     */
+    const std::list<std::unique_ptr<arc::arg::Flag>>& get_flags() const;
+
+    /*!
+     * \brief Adds a flag definition to the parser.
+     *
+     * \note The Parser will take ownership of the Flag pointer.
+     *
+     * \throws arc::ex::StateError If this function is called during
+     *                             arc::arg::Parser::execute().
+     */
+    void add_flag(arc::arg::Flag* flag);
 
 private:
 
@@ -123,16 +141,25 @@ private:
     //                             PRIVATE ATTRIBUTES
     //--------------------------------------------------------------------------
 
+    // whether the parser is currently executing or not
+    bool m_executing;
+
+    // the default exit code which will be used if an error is encountered
     int m_error_exit_code;
 
-    std::list<std::unique_ptr<arc::arg::Definition>> m_defs;
+    // the actions that have been added to the parser
+    std::list<std::unique_ptr<arc::arg::Action>> m_actions;
+    // the action to be executed (null if no action)
+    arc::arg::Action* m_action_execute;
 
-    // list of definitions to be executed (in order)
-    std::list<arc::arg::Definition*> m_execute;
+    // the flags that have been added to the parser
+    std::list<std::unique_ptr<arc::arg::Flag>> m_flags;
+    // the flags to be execute (in order)
+    std::list<arc::arg::Flag*> m_flags_execute;
 };
 
 } // namespace arg
-} // namespace ARC_BASE_VERSION_NS
+ARC_BASE_VERSION_NS_END
 } // namespace arc
 
 #endif

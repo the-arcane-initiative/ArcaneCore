@@ -37,6 +37,7 @@
 
 #include "arcanecore/base/Exceptions.hpp"
 
+// TODO: need the OS definitions
 // allows us to use std::localtime, without warning it's unsafe.
 #ifdef ARC_OS_WINDOWS
     #pragma warning(disable : 4996) //_CRT_SECURE_NO_WARNINGS
@@ -45,9 +46,7 @@
 
 namespace arc
 {
-inline namespace ARC_BASE_VERSION_NS
-{
-
+ARC_BASE_VERSION_NS_BEGIN
 namespace clock
 {
 
@@ -110,5 +109,5 @@ deus::UnicodeStorage get_timestamp(
 }
 
 } // namespace clock
-} // namespace ARC_BASE_VERSION_NS
+ARC_BASE_VERSION_NS_END
 } // namespace arc

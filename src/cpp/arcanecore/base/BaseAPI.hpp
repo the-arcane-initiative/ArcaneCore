@@ -44,14 +44,31 @@
 #define ARC_BASE_API_VERSION_MINOR 3
 
 
+#ifndef IN_DOXYGEN
+
 #define ARC_BASE_BUILD_VER_NS2(major, minor) v##major##_##minor
 #define ARC_BASE_BUILD_VER_NS(major, minor) ARC_BASE_BUILD_VER_NS2(major, minor)
 
-// TODO: DOC
 #define ARC_BASE_VERSION_NS         \
     ARC_BASE_BUILD_VER_NS(          \
         ARC_BASE_API_VERSION_MAJOR, \
         ARC_BASE_API_VERSION_MINOR  \
     )
+
+#endif // IN_DOXYGEN
+
+// TODO: DOC
+#define ARC_BASE_VERSION_NS_BEGIN
+#ifndef IN_DOXYGEN
+    #undef ARC_BASE_VERSION_NS_BEGIN
+    #define ARC_BASE_VERSION_NS_BEGIN inline namespace ARC_BASE_VERSION_NS {
+#endif
+
+// TODO: DOC
+#define ARC_BASE_VERSION_NS_END
+#ifndef IN_DOXYGEN
+    #undef ARC_BASE_VERSION_NS_END
+    #define ARC_BASE_VERSION_NS_END }
+#endif
 
 #endif

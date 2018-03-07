@@ -42,8 +42,7 @@
 
 namespace arc
 {
-inline namespace ARC_BASE_VERSION_NS
-{
+ARC_BASE_VERSION_NS_BEGIN
 
 /*!
  * \brief Extensions to the C++ Language.
@@ -52,7 +51,7 @@ namespace lang
 {
 } // namespace lang
 
-} // namesace ARC_BASE_VERSION_NS
+ARC_BASE_VERSION_NS_END
 } // namespace arc
 
 #endif

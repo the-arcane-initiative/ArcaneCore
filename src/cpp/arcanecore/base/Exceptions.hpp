@@ -48,8 +48,7 @@
 
 namespace arc
 {
-inline namespace ARC_BASE_VERSION_NS
-{
+ARC_BASE_VERSION_NS_BEGIN
 
 /*!
  * \brief Generic exceptions that can be thrown by ArcaneCore.
@@ -145,6 +144,24 @@ public:
 };
 
 //------------------------------------------------------------------------------
+//                                  VALUE ERROR
+//------------------------------------------------------------------------------
+
+/*!
+ * \brief Warns that an invalid value has been used for an operation.
+ */
+class ValueError
+    : public ArcError
+{
+public:
+
+    ValueError(const deus::UnicodeView& what)
+        : ArcError(what, "ValueError")
+    {
+    }
+};
+
+//------------------------------------------------------------------------------
 //                                  STATE ERROR
 //------------------------------------------------------------------------------
 
@@ -164,7 +181,7 @@ public:
 };
 
 } // namespace ex
-} // namespace ARC_BASE_VERSION_NS
+ARC_BASE_VERSION_NS_END
 } // namespace arc
 
 #endif

@@ -49,16 +49,6 @@
  */
 namespace arc
 {
-
-// note: currently this has to be updated every time the API changes
-/*!
- * \brief Version 0.0 of the ArcaneCore Base API. This namespace is implicit and
- *        doesn't have to be used by source code using ArcaneCore.
- */
-inline namespace ARC_BASE_VERSION_NS
-{
-} // namespace DEUS_VERSION_NS
-
 } // namespace arc
 
 #endif

@@ -34,13 +34,14 @@
 
 #include <iostream>
 
-#include "arcanecore/base/arg/Definition.hpp"
+#include "arcanecore/base/Exceptions.hpp"
+#include "arcanecore/base/arg/Action.hpp"
+#include "arcanecore/base/arg/Flag.hpp"
 
 
 namespace arc
 {
-inline namespace ARC_BASE_VERSION_NS
-{
+ARC_BASE_VERSION_NS_BEGIN
 namespace arg
 {
 
@@ -49,7 +50,9 @@ namespace arg
 //------------------------------------------------------------------------------
 
 Parser::Parser(int error_exit_code)
-    : m_error_exit_code(error_exit_code)
+    : m_executing      (false)
+    , m_error_exit_code(error_exit_code)
+    , m_action_execute (nullptr)
 {
 }
 
@@ -67,18 +70,66 @@ Parser::~Parser()
 
 int Parser::execute(int argc, char** argv)
 {
+    m_executing = true;
+
     // iterate arguments
     std::size_t i = 1;
     while(i < static_cast<std::size_t>(argc))
     {
-        // iterate definitions
-        bool matched = false;
-        for(std::unique_ptr<arc::arg::Definition>& def : m_defs)
+        // parse actions on the first iteration
+        if(i == 1)
         {
+            bool matched = false;
+            for(std::unique_ptr<arc::arg::Action>& action : m_actions)
+            {
+                std::size_t increment = 1;
+                bool exit_program = false;
+                int return_code = 0;
+                matched = action->parse(
+                    i,
+                    argc,
+                    argv,
+                    increment,
+                    exit_program,
+                    return_code
+                );
+                if(matched)
+                {
+                    // exit?
+                    if(exit_program)
+                    {
+                        return return_code;
+                    }
+
+                    // queue for execution and increment
+                    m_action_execute = action.get();
+                    i += increment;
+                    break;
+                }
+            }
+
+            if(matched)
+            {
+                continue;
+            }
+        }
+
+        // parse flags
+        bool matched = false;
+        for(std::unique_ptr<arc::arg::Flag>& flag : m_flags)
+        {
+            std::size_t increment = 1;
             bool exit_program = false;
             int return_code = 0;
-            std::size_t increment = 1;
-            if(def->check(i, argc, argv, increment, exit_program, return_code))
+            matched = flag->parse(
+                i,
+                argc,
+                argv,
+                increment,
+                exit_program,
+                return_code
+            );
+            if(matched)
             {
                 // exit?
                 if(exit_program)
@@ -86,13 +137,13 @@ int Parser::execute(int argc, char** argv)
                     return return_code;
                 }
 
-                // add to the execute list and increment
-                m_execute.push_back(def.get());
+                // queue for execution and increment
+                m_flags_execute.push_back(flag.get());
                 i += increment;
-                matched = true;
                 break;
             }
         }
+
         if(matched)
         {
             continue;
@@ -106,17 +157,34 @@ int Parser::execute(int argc, char** argv)
             << "Unrecognised command line argument: \'" << current << "\'."
             << "\nUse \'--help\' or \'-h\' for program help." << std::endl;
         return m_error_exit_code;
-
-        ++i;
     }
 
-    // execute definition
-    for(arc::arg::Definition* def : m_execute)
+    // nothing to do?
+    if(m_action_execute == nullptr && m_flags_execute.empty())
     {
-        int return_code = 0;
-        if(!def->execute(return_code))
+        std::cerr
+            << "No command line arguments supplied.\nUse \'--help\' or \'-h\' "
+            "for program help." << std::endl;
+        return 0;
+    }
+
+    // execute action?
+    if(m_action_execute != nullptr)
+    {
+        int exit_code = m_error_exit_code;
+        if(!m_action_execute->execute(exit_code))
         {
-            return return_code;
+            return exit_code;
+        }
+    }
+
+    // execute flags
+    for(arc::arg::Flag* flag : m_flags_execute)
+    {
+        int exit_code = m_error_exit_code;
+        if(!flag->execute(exit_code))
+        {
+            return exit_code;
         }
     }
 
@@ -124,11 +192,44 @@ int Parser::execute(int argc, char** argv)
     return 0;
 }
 
-void Parser::add_definition(arc::arg::Definition* def)
+const std::list<std::unique_ptr<arc::arg::Action>>& Parser::get_actions() const
 {
-    m_defs.emplace_back(def);
+    return m_actions;
+}
+
+void Parser::add_action(arc::arg::Action* action)
+{
+    if(m_executing)
+    {
+        throw arc::ex::StateError(
+            "Command line action (" + action->get_key() + ") cannot be added "
+            "to parser during parser execution."
+        );
+    }
+
+    action->set_parser_parent(this);
+    m_actions.emplace_back(action);
+}
+
+const std::list<std::unique_ptr<arc::arg::Flag>>& Parser::get_flags() const
+{
+    return m_flags;
+}
+
+void Parser::add_flag(arc::arg::Flag* flag)
+{
+    if(m_executing)
+    {
+        throw arc::ex::StateError(
+            "Command line flag (" + flag->get_long_key() + ") cannot be added "
+            "to parser during parser execution."
+        );
+    }
+
+    flag->set_parser_parent(this);
+    m_flags.emplace_back(flag);
 }
 
 } // namespace arg
-} // namespace ARC_BASE_VERSION_NS
+ARC_BASE_VERSION_NS_END
 } // namespace arc

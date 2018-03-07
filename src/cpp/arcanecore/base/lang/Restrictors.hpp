@@ -43,8 +43,7 @@
 
 namespace arc
 {
-inline namespace ARC_BASE_VERSION_NS
-{
+ARC_BASE_VERSION_NS_BEGIN
 namespace lang
 {
 
@@ -97,7 +96,7 @@ private:
 };
 
 } // namespace lang
-} // namesace ARC_BASE_VERSION_NS
+ARC_BASE_VERSION_NS_END
 } // namespace arc
 
 #endif

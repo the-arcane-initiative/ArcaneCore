@@ -44,8 +44,7 @@
 
 namespace arc
 {
-inline namespace ARC_BASE_VERSION_NS
-{
+ARC_BASE_VERSION_NS_BEGIN
 namespace clock
 {
 
@@ -74,7 +73,7 @@ enum class TimeMetric : uint64_t
 };
 
 } // namespace clock
-} // namespace ARC_BASE_VERSION_NS
+ARC_BASE_VERSION_NS_END
 } // namespace arc
 
 #endif
